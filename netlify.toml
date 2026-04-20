@@ -1,0 +1,15 @@
+[build]
+  command = "next build"
+  publish = ".next"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production]
+  command = "next build"
+  publish = ".next"

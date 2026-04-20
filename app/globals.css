@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* 1. THE NUCLEAR HIDE: Target everything to ensure the bar is gone */
+:root {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* 2. SEO & PERFORMANCE BASE */
+html {
+  /* Standard smooth scroll for bots/crawlers */
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 3. LENIS SPECIFIC LOGIC: Ensures smooth scrolling doesn't break */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Prevents layout shift during active scrolling */
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* 4. ACCESSIBILITY: Respect User Settings (Major SEO Factor) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 5. BRAND POLISH */
+::selection {
+  @apply bg-orange-500/30 text-gray-900;
+}
