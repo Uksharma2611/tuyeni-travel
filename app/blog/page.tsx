@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import BlogClient from "./BlogClient";
-// IMPORTANT: Adjust this path to point to your actual Sanity client file
-import { client } from "../../sanity/lib/client"; 
+import { client } from "../../sanity/lib/client";
+import { ALL_POSTS_QUERY } from "../../sanity/lib/queries"; // THE FIX: Import query here
+import { urlFor } from "../../sanity/lib/image"; // THE FIX: Import image builder here
 
 // --- OPTIMIZED PAGE METADATA ---
 export const metadata: Metadata = {
@@ -54,6 +55,22 @@ export default async function Blog() {
     poster: `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`
   } : null;
 
+  // THE FIX: Fetch and format all blog posts on the server to eliminate loading screens
+  const fetchedPosts = await client.fetch(ALL_POSTS_QUERY);
+  const formattedPosts = fetchedPosts.map((post: any) => ({
+    ...post,
+    date: post.date
+      ? new Date(post.date).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+      : "Recent",
+    imageUrl: post.mainImage
+      ? urlFor(post.mainImage).width(800).format("webp").quality(80).url()
+      : "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg?auto=compress&cs=tinysrgb&w=800",
+  }));
+
   // --- OPTIMIZED STRUCTURED DATA (JSON-LD) ---
   const jsonLd = {
     "@context": "https://schema.org",
@@ -79,8 +96,8 @@ export default async function Blog() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Passing the fetched video down to your client component */}
-      <BlogClient sanityVideo={video} />
+      {/* Passing the fetched video AND the prefetched posts down to your client component */}
+      <BlogClient sanityVideo={video} initialPosts={formattedPosts} />
     </>
   );
 }

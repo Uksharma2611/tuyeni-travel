@@ -21,8 +21,9 @@ const allServices = [
       "Budget optimization",
       "Insider recommendations for dining and activities",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=75&fm=webp",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 20l-5.447-2.724A2 2 0 013 15.382V6.618a2 2 0 011.553-1.944L9 4m0 16l6-3m-6 3V4m6 13l5.447 2.724A2 2 0 0021 17.82V9.118a2 2 0 00-1.553-1.944L15 4m0 13V4" />
@@ -41,8 +42,9 @@ const allServices = [
       "All park entry fees and logistics handled",
       "Small group sizes for an intimate experience",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.pexels.com/photos/9942902/pexels-photo-9942902.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/9942902/pexels-photo-9942902.jpeg?auto=compress&cs=tinysrgb&w=1200&fm=webp&q=75",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -61,8 +63,9 @@ const allServices = [
       "Pre-booked campsites or lodges along the route",
       "24/7 on-the-ground emergency support",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=1200&q=75&fm=webp",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -81,8 +84,9 @@ const allServices = [
       "Airport pickup and drop-off coordination",
       "Thorough vehicle handover and briefing",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.pexels.com/photos/6510638/pexels-photo-6510638.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/6510638/pexels-photo-6510638.jpeg?auto=compress&cs=tinysrgb&w=1200&fm=webp&q=75",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1zm0 0h5l3 3m-3-3l-3-3" />
@@ -101,8 +105,9 @@ const allServices = [
       "Dietary and special request coordination",
       "Exclusive perks through our partner network",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.pexels.com/photos/18611224/pexels-photo-18611224.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/18611224/pexels-photo-18611224.jpeg?auto=compress&cs=tinysrgb&w=1200&fm=webp&q=75",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -121,8 +126,9 @@ const allServices = [
       "Restaurant reservations at top local dining spots",
       "Permits for restricted wilderness areas",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.pexels.com/photos/28425179/pexels-photo-28425179.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/28425179/pexels-photo-28425179.jpeg?auto=compress&cs=tinysrgb&w=1200&fm=webp&q=75",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -141,8 +147,9 @@ const allServices = [
       "Inter-city shuttle coordination",
       "Spacious vehicles with ample luggage capacity",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.pexels.com/photos/30195938/pexels-photo-30195938.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/30195938/pexels-photo-30195938.jpeg?auto=compress&cs=tinysrgb&w=1200&fm=webp&q=75",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -161,8 +168,9 @@ const allServices = [
       "12V portable fridge/freezers",
       "Sturdy camping chairs and tables",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=1200&q=75&fm=webp",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 21v-4m18 4v-4M3 10l9-7 9 7M4 10v11h16V10" />
@@ -181,8 +189,9 @@ const allServices = [
       "Flexible, on-demand daily routing",
       "Deep local knowledge and route optimization",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=75&fm=webp",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -201,8 +210,9 @@ const allServices = [
       "Remote location catering and camp setup",
       "Customized logistical problem-solving",
     ],
+    // OPTIMIZED: Appended fm=webp and q=75
     image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=75&fm=webp",
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -250,7 +260,7 @@ export default function ServicesClient({ sanityVideo }: ServicesClientProps) {
                 width: '100%',
                 height: '100%',
                 '--media-object-fit': 'cover',
-                '--media-object-position': 'center 60%', 
+                '--media-object-position': 'center 60%',
                 '--controls': 'none'
               } as React.CSSProperties}
             />
@@ -288,9 +298,8 @@ export default function ServicesClient({ sanityVideo }: ServicesClientProps) {
                 >
                   {/* THE CARD */}
                   <article
-                    className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 ${
-                      index % 2 !== 0 ? "lg:flex-row-reverse" : ""
-                    } relative z-10 bg-white`}
+                    className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 ${index % 2 !== 0 ? "lg:flex-row-reverse" : ""
+                      } relative z-10 bg-white`}
                   >
                     <div className="w-full lg:w-5/12 group overflow-hidden rounded-3xl shadow-xl aspect-video relative shrink-0">
                       <Image
@@ -371,11 +380,10 @@ export default function ServicesClient({ sanityVideo }: ServicesClientProps) {
                         >
                           {isExpanded ? "Show Less" : "Learn More"}
                           <span
-                            className={`transition-transform duration-300 ${
-                              isExpanded
+                            className={`transition-transform duration-300 ${isExpanded
                                 ? "-rotate-90"
                                 : "group-hover:translate-x-1"
-                            }`}
+                              }`}
                             aria-hidden="true"
                           >
                             {isExpanded ? "↑" : "→"}
@@ -387,11 +395,10 @@ export default function ServicesClient({ sanityVideo }: ServicesClientProps) {
 
                   {/* THE EXPANDING CURTAIN */}
                   <div
-                    className={`grid transition-all duration-500 ease-in-out ${
-                      isExpanded
+                    className={`grid transition-all duration-500 ease-in-out ${isExpanded
                         ? "grid-rows-[1fr] opacity-100"
                         : "grid-rows-[0fr] opacity-0"
-                    } relative z-0`}
+                      } relative z-0`}
                   >
                     <div className="overflow-hidden">
                       <div className="pt-8 pb-6 px-6 md:px-10 mt-4 bg-gray-50 border border-gray-100 rounded-3xl shadow-inner flex flex-col md:flex-row gap-8">

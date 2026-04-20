@@ -3,9 +3,15 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// Import the Lenis hook to sync with your global smooth scroller
 import { useLenis } from "lenis/react";
-import MuxPlayer from "@mux/mux-player-react";
+import dynamic from "next/dynamic";
+
+// --- DYNAMIC IMPORT (LAZY LOADING) ---
+// This prevents the heavy video player from blocking the initial page load
+const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-gray-900 animate-pulse" />
+});
 
 // --- COMPREHENSIVE FORM DROPDOWN DATA ---
 const COUNTRIES = [
@@ -15,8 +21,6 @@ const COUNTRIES = [
 const COUNTRY_CODES = [
   { code: "+1", label: "+1 (US/CA)" }, { code: "+7", label: "+7 (RU/KZ)" }, { code: "+20", label: "+20 (EG)" }, { code: "+27", label: "+27 (ZA)" }, { code: "+30", label: "+30 (GR)" }, { code: "+31", label: "+31 (NL)" }, { code: "+32", label: "+32 (BE)" }, { code: "+33", label: "+33 (FR)" }, { code: "+34", label: "+34 (ES)" }, { code: "+36", label: "+36 (HU)" }, { code: "+39", label: "+39 (IT)" }, { code: "+40", label: "+40 (RO)" }, { code: "+41", label: "+41 (CH)" }, { code: "+43", label: "+43 (AT)" }, { code: "+44", label: "+44 (UK)" }, { code: "+45", label: "+45 (DK)" }, { code: "+46", label: "+46 (SE)" }, { code: "+47", label: "+47 (NO)" }, { code: "+48", label: "+48 (PL)" }, { code: "+49", label: "+49 (DE)" }, { code: "+51", label: "+51 (PE)" }, { code: "+52", label: "+52 (MX)" }, { code: "+53", label: "+53 (CU)" }, { code: "+54", label: "+54 (AR)" }, { code: "+55", label: "+55 (BR)" }, { code: "+56", label: "+56 (CL)" }, { code: "+57", label: "+57 (CO)" }, { code: "+58", label: "+58 (VE)" }, { code: "+60", label: "+60 (MY)" }, { code: "+61", label: "+61 (AU)" }, { code: "+62", label: "+62 (ID)" }, { code: "+63", label: "+63 (PH)" }, { code: "+64", label: "+64 (NZ)" }, { code: "+65", label: "+65 (SG)" }, { code: "+66", label: "+66 (TH)" }, { code: "+81", label: "+81 (JP)" }, { code: "+82", label: "+82 (KR)" }, { code: "+84", label: "+84 (VN)" }, { code: "+86", label: "+86 (CN)" }, { code: "+90", label: "+90 (TR)" }, { code: "+91", label: "+91 (IN)" }, { code: "+92", label: "+92 (PK)" }, { code: "+93", label: "+93 (AF)" }, { code: "+94", label: "+94 (LK)" }, { code: "+95", label: "+95 (MM)" }, { code: "+98", label: "+98 (IR)" }, { code: "+211", label: "+211 (SS)" }, { code: "+212", label: "+212 (MA)" }, { code: "+213", label: "+213 (DZ)" }, { code: "+216", label: "+216 (TN)" }, { code: "+218", label: "+218 (LY)" }, { code: "+220", label: "+220 (GM)" }, { code: "+221", label: "+221 (SN)" }, { code: "+234", label: "+234 (NG)" }, { code: "+254", label: "+254 (KE)" }, { code: "+255", label: "+255 (TZ)" }, { code: "+256", label: "+256 (UG)" }, { code: "+260", label: "+260 (ZM)" }, { code: "+263", label: "+263 (ZW)" }, { code: "+264", label: "+264 (NA)" }, { code: "+351", label: "+351 (PT)" }, { code: "+353", label: "+353 (IE)" }, { code: "+358", label: "+358 (FI)" }, { code: "+380", label: "+380 (UA)" }, { code: "+971", label: "+971 (UAE)" }, { code: "+972", label: "+972 (IL)" }, { code: "+977", label: "+977 (NP)" }
 ];
-
-
 
 interface HomeClientProps {
   sanityVideos?: { playbackId: string; poster: string }[];
@@ -42,7 +46,6 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
  
-
   const todayDate = new Date().toISOString().split("T")[0];
 
   const [formData, setFormData] = useState({
@@ -50,9 +53,8 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
     budget: "", preferences: "", name: "", email: "", phoneCode: "+1", phone: "",
   });
 
-   const isValidName = /^[a-zA-Z\s\-']+$/.test(formData.name.trim());
+  const isValidName = /^[a-zA-Z\s\-']+$/.test(formData.name.trim());
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim());
-
 
   useEffect(() => {
     if (isModalOpen) {
@@ -904,7 +906,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                       !isValidName ||
                       !isValidEmail ||
                       !formData.phone ||
-                      formData.phone.length == 10  // THE FIX: Minimum length requirement for phone number
+                      formData.phone.length < 10  // THE FIX: Corrected phone length validation
                     }
                     className="bg-orange-500 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center min-w-[150px]"
                   >

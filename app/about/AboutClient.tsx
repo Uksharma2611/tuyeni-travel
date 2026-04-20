@@ -11,7 +11,7 @@ interface AboutClientProps {
 export default function AboutClient({ sanityVideo }: AboutClientProps) {
   return (
     <main className="min-h-screen bg-white relative">
-      
+
       {/* 1. HERO SECTION */}
       <section
         className="relative pt-35 pb-9 bg-gray-900 overflow-hidden"
@@ -19,7 +19,7 @@ export default function AboutClient({ sanityVideo }: AboutClientProps) {
       >
         {/* OPTIMIZED: Added aria-hidden to decorative background container */}
         <div className="absolute inset-0 opacity-40" aria-hidden="true">
-          
+
           {/* THE FIX: Added scale-[1.25] for mobile zoom, resetting to scale-100 on desktop */}
           {sanityVideo ? (
             <MuxPlayer
@@ -31,10 +31,10 @@ export default function AboutClient({ sanityVideo }: AboutClientProps) {
               playsInline
               streamType="on-demand"
               minResolution="480p"
-              className="absolute inset-0 w-full h-full object-cover scale-[1.25] sm:scale-100 origin-center transition-transform duration-500" 
+              className="absolute inset-0 w-full h-full object-cover scale-[1.25] sm:scale-100 origin-center transition-transform duration-500"
               style={{
                 '--media-object-fit': 'cover',
-                '--media-object-position': 'center', 
+                '--media-object-position': 'center',
                 '--controls': 'none',
                 minHeight: '100%',
                 minWidth: '100%'
@@ -98,13 +98,14 @@ export default function AboutClient({ sanityVideo }: AboutClientProps) {
 
               <div className="relative h-[550px] rounded-[2rem] overflow-hidden shadow-lg group">
                 <Image
-                  src="https://images.pexels.com/photos/20324831/pexels-photo-20324831.jpeg?auto=compress&cs=tinysrgb&w=2000"
-                  alt="Travelers enjoying a seamless Tuyeni Travel experience in Namibia" 
+                  // OPTIMIZED: Appended fm=webp and q=75
+                  src="https://images.pexels.com/photos/20324831/pexels-photo-20324831.jpeg?auto=compress&cs=tinysrgb&w=2000&fm=webp&q=75"
+                  alt="Travelers enjoying a seamless Tuyeni Travel experience in Namibia"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  loading="lazy" 
-                  unoptimized 
+                  loading="lazy"
+                  unoptimized
                 />
               </div>
             </div>

@@ -5,6 +5,7 @@ import { client } from "@/sanity/lib/client";
 import { SINGLE_POST_QUERY } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import type { Metadata, ResolvingMetadata } from "next";
+import { urlFor } from "@/sanity/lib/image"; // THE FIX: Import Sanity image builder
 
 // --- DYNAMIC METADATA GENERATION ---
 // This function runs on the server before the page renders to inject SEO tags
@@ -27,10 +28,13 @@ export async function generateMetadata(
     post.seoDescription ||
     post.excerpt ||
     "Read the latest travel journal from Tuyeni Travel.";
-  const image =
-    post.seoImageUrl ||
-    post.imageUrl ||
-    "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg";
+
+  // THE FIX: Compress the metadata image to 1200px WebP
+  const image = post.seoImage
+    ? urlFor(post.seoImage).width(1200).format("webp").url()
+    : post.mainImage
+      ? urlFor(post.mainImage).width(1200).format("webp").url()
+      : "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg";
 
   return {
     title: title,
@@ -69,10 +73,12 @@ const RichTextComponents = {
     image: ({ value }: any) => (
       <div className="relative w-full h-96 my-10 rounded-3xl overflow-hidden shadow-lg">
         <Image
-          src={value.asset.url}
+          // THE FIX: Compress inline body images to 1000px WebP
+          src={urlFor(value).width(1000).format("webp").quality(80).url()}
           alt="Blog Content Image"
           fill
           className="object-cover"
+          unoptimized // THE FIX: Bypass Netlify optimization failure
         />
       </div>
     ),
@@ -134,10 +140,10 @@ export default async function SingleBlogPage({
   // Format the date
   const formattedDate = post.date
     ? new Date(post.date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
     : "Recent";
 
   // --- DYNAMIC STRUCTURED DATA (JSON-LD) ---
@@ -150,10 +156,11 @@ export default async function SingleBlogPage({
     },
     headline: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
-    image:
-      post.seoImageUrl ||
-      post.imageUrl ||
-      "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg",
+    image: post.seoImage
+      ? urlFor(post.seoImage).url()
+      : post.mainImage
+        ? urlFor(post.mainImage).url()
+        : "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg",
     author: {
       "@type": "Organization",
       name: "Tuyeni Travel",
@@ -184,9 +191,11 @@ export default async function SingleBlogPage({
       <section className="relative pt-40 pb-32 lg:pt-48 lg:pb-40 bg-gray-900 overflow-hidden">
         <div className="absolute inset-0 opacity-50">
           <Image
+            // THE FIX: Compress the Hero image to 1600px WebP
             src={
-              post.imageUrl ||
-              "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg"
+              post.mainImage
+                ? urlFor(post.mainImage).width(1600).format("webp").quality(85).url()
+                : "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg"
             }
             alt={post.title}
             fill

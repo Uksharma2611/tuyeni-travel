@@ -3,8 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { client } from "@/sanity/lib/client";
-import { ALL_POSTS_QUERY } from "@/sanity/lib/queries";
 import MuxPlayer from "@mux/mux-player-react";
 
 const CATEGORIES = [
@@ -29,15 +27,16 @@ interface Post {
 
 interface BlogClientProps {
   sanityVideo?: { playbackId: string; poster: string } | null;
+  initialPosts: Post[]; // THE FIX: Accept the pre-fetched posts from the server
 }
 
-export default function BlogClient({ sanityVideo }: BlogClientProps) {
+export default function BlogClient({ sanityVideo, initialPosts }: BlogClientProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const filterRef = useRef<HTMLDivElement>(null);
 
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // THE FIX: Initialize state directly with the server-provided posts. No more loading!
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
 
   // --- PAGINATION STATE ---
   const [visibleCount, setVisibleCount] = useState(6);
@@ -48,7 +47,6 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
   useEffect(() => {
     setVisibleCount(6);
   }, [activeCategory, searchQuery]);
-  // -----------------------------
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
@@ -119,33 +117,6 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
     }
   };
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const fetchedPosts = await client.fetch(ALL_POSTS_QUERY);
-        const formattedPosts = fetchedPosts.map((post: any) => ({
-          ...post,
-          date: post.date
-            ? new Date(post.date).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })
-            : "Recent",
-          imageUrl:
-            post.imageUrl ||
-            "https://images.pexels.com/photos/3305542/pexels-photo-3305542.jpeg?auto=compress&cs=tinysrgb&w=800",
-        }));
-        setPosts(formattedPosts);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchPosts();
-  }, []);
-
   const handleCategoryClick = (cat: string) => {
     setActiveCategory(cat);
   };
@@ -162,19 +133,9 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
   const visiblePosts = filteredPosts.slice(0, visibleCount);
   const FEATURED_POST = posts.length > 0 ? posts[0] : null;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-orange-500 font-bold text-xl animate-pulse">
-          Loading Tuyeni Journals...
-        </div>
-      </div>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-gray-50/50 relative">
-      
+
       {/* 1. HERO SECTION */}
       <section
         className="relative pt-35 pb-15 bg-gray-900 overflow-hidden"
@@ -184,7 +145,7 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
           {sanityVideo ? (
             <MuxPlayer
               playbackId={sanityVideo.playbackId}
-              poster={sanityVideo.poster} 
+              poster={sanityVideo.poster}
               muted
               autoPlay="muted"
               loop
@@ -194,7 +155,7 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
                 width: '100%',
                 height: '100%',
                 '--media-object-fit': 'cover',
-                '--media-object-position': 'center 20%', 
+                '--media-object-position': 'center 20%',
                 '--controls': 'none'
               } as React.CSSProperties}
             />
@@ -221,13 +182,76 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
         <div className="container mx-auto px-6 lg:px-12">
           <div
             id="blog-main-card"
-            className="w-full mt-1" 
+            className="w-full mt-1"
           >
-            
+
             {/* SEARCH & CATEGORY FILTERS */}
             <div className="mb-12 border-b border-gray-200 pb-8 pt-4">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                
+
+                {/* DESKTOP CATEGORY BUTTONS */}
+                <div className="hidden md:flex flex-wrap gap-2 md:gap-3" role="group" aria-label="Article Categories">
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryClick(cat)}
+                      aria-pressed={activeCategory === cat}
+                      className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${activeCategory === cat
+                          ? "bg-gray-900 text-white shadow-md"
+                          : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                        }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                {/* MOBILE CATEGORY DROPDOWN */}
+                <div className="block md:hidden w-full relative z-30">
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={`w-full px-5 py-3.5 bg-white border ${isDropdownOpen
+                        ? "border-orange-500 ring-1 ring-orange-500"
+                        : "border-gray-200"
+                      } rounded-full flex justify-between items-center transition-all text-sm font-bold text-gray-900 shadow-sm cursor-pointer`}
+                  >
+                    <span>{activeCategory}</span>
+                    <svg
+                      className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""
+                        }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Menu List */}
+                  <div
+                    className={`absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden py-2 transform origin-top transition-all duration-300 ease-out ${isDropdownOpen
+                        ? "opacity-100 scale-100 translate-y-0 visible pointer-events-auto"
+                        : "opacity-0 scale-95 -translate-y-3 invisible pointer-events-none"
+                      }`}
+                  >
+                    {CATEGORIES.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          handleCategoryClick(cat);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-5 py-3 text-sm transition-colors ${activeCategory === cat
+                            ? "bg-[#B3E5FC] text-gray-900 font-bold"
+                            : "text-gray-700 hover:bg-gray-50 font-medium"
+                          }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* SEARCH BAR */}
                 <div className="relative w-full lg:w-72 shrink-0 z-10">
                   <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -255,81 +279,11 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
                     className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-full focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm font-medium shadow-sm"
                   />
                 </div>
-
-                {/* DESKTOP CATEGORY BUTTONS */}
-                <div className="hidden md:flex flex-wrap gap-2 md:gap-3" role="group" aria-label="Article Categories">
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => handleCategoryClick(cat)}
-                      aria-pressed={activeCategory === cat}
-                      className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${
-                        activeCategory === cat
-                          ? "bg-gray-900 text-white shadow-md"
-                          : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-
-                {/* MOBILE CATEGORY DROPDOWN */}
-                <div className="block md:hidden w-full relative z-30">
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className={`w-full px-5 py-3.5 bg-white border ${
-                      isDropdownOpen 
-                        ? "border-orange-500 ring-1 ring-orange-500" 
-                        : "border-gray-200"
-                    } rounded-full flex justify-between items-center transition-all text-sm font-bold text-gray-900 shadow-sm cursor-pointer`}
-                  >
-                    <span>{activeCategory}</span>
-                    <svg
-                      className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${
-                        isDropdownOpen ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {/* Dropdown Menu List */}
-                  <div
-                    className={`absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden py-2 transform origin-top transition-all duration-300 ease-out ${
-                      isDropdownOpen
-                        ? "opacity-100 scale-100 translate-y-0 visible pointer-events-auto"
-                        : "opacity-0 scale-95 -translate-y-3 invisible pointer-events-none"
-                    }`}
-                  >
-                    {CATEGORIES.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          handleCategoryClick(cat);
-                          setIsDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-5 py-3 text-sm transition-colors ${
-                          activeCategory === cat
-                            ? "bg-[#B3E5FC] text-gray-900 font-bold"
-                            : "text-gray-700 hover:bg-gray-50 font-medium"
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                
               </div>
             </div>
 
             {/* --- FEATURED POST --- */}
-            {activeCategory === "All" && !searchQuery && FEATURED_POST && !isLoading && (
+            {activeCategory === "All" && !searchQuery && FEATURED_POST && (
               <div className="mb-20">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
@@ -387,7 +341,7 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      unoptimized 
+                      unoptimized
                     />
                     <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold text-orange-600 shadow-sm">
                       {FEATURED_POST.category}
@@ -450,17 +404,7 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
 
             {/* --- RECENT POSTS GRID --- */}
             <div>
-              {isLoading ? (
-                <div className="text-center py-32">
-                  <div className="inline-flex items-center gap-3 bg-orange-50 px-6 py-3 rounded-full text-orange-500 font-bold animate-pulse shadow-sm border border-orange-100">
-                    <svg className="animate-spin h-5 w-5 text-orange-500" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Loading Tuyeni Journals...
-                  </div>
-                </div>
-              ) : visiblePosts.length === 0 ? (
+              {visiblePosts.length === 0 ? (
                 <div className="text-center py-20">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     No articles found
@@ -496,7 +440,7 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
                             fill
                             className="object-cover transition-transform duration-700 group-hover:scale-110"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            unoptimized 
+                            unoptimized
                           />
                           <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-orange-600 shadow-sm">
                             {post.category}
@@ -699,11 +643,10 @@ export default function BlogClient({ sanityVideo }: BlogClientProps) {
 
       {/* --- FLOATING TOAST NOTIFICATION --- */}
       <div
-        className={`fixed bottom-6 right-6 z-50 transition-all duration-500 transform ${
-          notification
+        className={`fixed bottom-6 right-6 z-50 transition-all duration-500 transform ${notification
             ? "translate-y-0 opacity-100"
             : "translate-y-8 opacity-0 pointer-events-none"
-        }`}
+          }`}
         role="alert"
       >
         {notification && (
