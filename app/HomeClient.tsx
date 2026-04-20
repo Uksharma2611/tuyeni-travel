@@ -28,8 +28,8 @@ interface HomeClientProps {
 
 export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [isInitialImageVisible, setIsInitialImageVisible] = useState(true); 
-  
+  const [isInitialImageVisible, setIsInitialImageVisible] = useState(true);
+
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
- 
+
   const todayDate = new Date().toISOString().split("T")[0];
 
   const [formData, setFormData] = useState({
@@ -135,25 +135,25 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
       {/* 1. HERO SECTION */}
       <section className="relative h-screen w-full flex items-center justify-center text-center px-6" aria-label="Main Hero">
         <div className="absolute inset-0 z-0 bg-gray-900 overflow-hidden">
-          
+
           {/* SEO FIRST PAINT IMAGE - THE FIX */}
           <div
-            className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-[600ms] ease-in-out ${
-              isInitialImageVisible ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-[600ms] ease-in-out ${isInitialImageVisible ? "opacity-100" : "opacity-0"
+              }`}
             aria-hidden="true" // OPTIMIZED: Hide visual placeholder from screen readers
           >
-            {/* OPTIMIZED: Replaced Next.js <Image> with standard <img> for instant unoptimized load */}
+            {/* OPTIMIZED: Using webp and fetchPriority to force browser to load this instantly */}
             <img
-              src="/assets/fourth.jpg"
+              src="/assets/fourth.webp"
               alt="" // Kept empty because aria-hidden is true
               className="w-full h-full object-cover object-bottom"
+              fetchPriority="high"
             />
           </div>
 
           {sanityVideos.map((videoData, index) => {
             const isActive = index === currentVideoIndex;
-            
+
             const nextIndex = currentVideoIndex === sanityVideos.length - 1 ? 0 : currentVideoIndex + 1;
             const isNext = index === nextIndex;
             const shouldPreload = isActive || isNext ? "auto" : "none";
@@ -161,9 +161,8 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
             return (
               <div
                 key={videoData.playbackId}
-                className={`absolute inset-0 transition-all duration-[100ms] ease-in-out ${
-                  isActive ? "opacity-100 z-10 scale-100" : "opacity-0 z-0 scale-105"
-                }`}
+                className={`absolute inset-0 transition-all duration-[100ms] ease-in-out ${isActive ? "opacity-100 z-10 scale-100" : "opacity-0 z-0 scale-105"
+                  }`}
               >
                 <MuxPlayer
                   ref={(el) => { videoRefs.current[index] = el as any; }}
@@ -171,7 +170,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                   muted
                   autoPlay={isActive ? "muted" : false}
                   streamType="on-demand"
-                  preload={shouldPreload} 
+                  preload={shouldPreload}
                   poster={videoData.poster}
                   minResolution="480p"
                   onPlaying={() => {
@@ -183,7 +182,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                     const video = e.target as HTMLMediaElement;
                     if (video && isActive && video.duration) {
                       const timeRemaining = video.duration - video.currentTime;
-                      
+
                       if (timeRemaining > 0 && timeRemaining <= 1.0) {
                         setCurrentVideoIndex((prevIndex) =>
                           prevIndex === sanityVideos.length - 1 ? 0 : prevIndex + 1
@@ -207,7 +206,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
               </div>
             );
           })}
-          
+
           <div className="absolute inset-0 bg-black/30 bg-gradient-to-t from-black/35 via-black/20 to-transparent z-20 pointer-events-none" aria-hidden="true"></div>
         </div>
 
@@ -660,7 +659,6 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                         When would you like to travel?
                       </h4>
                       <div className="mb-6">
-                        {/* OPTIMIZED: Added htmlFor and id for A11y */}
                         <label htmlFor="tripDates" className="block text-sm font-bold text-gray-700 mb-2">
                           Estimated Arrival Date
                         </label>
@@ -698,7 +696,6 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                       </h4>
                       <div className="space-y-6">
                         <div>
-                          {/* OPTIMIZED: Added htmlFor and id for A11y */}
                           <label htmlFor="travelerCount" className="block text-sm font-bold text-gray-700 mb-2">
                             Total Number of Travelers
                           </label>
@@ -710,8 +707,8 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                             value={formData.travelers}
                             onChange={handleInputChange}
                             onInput={(e) =>
-                              (e.currentTarget.value =
-                                e.currentTarget.value.replace(/[^0-9]/g, ""))
+                            (e.currentTarget.value =
+                              e.currentTarget.value.replace(/[^0-9]/g, ""))
                             }
                             className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none"
                           />
@@ -787,7 +784,6 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                         Any specific preferences?
                       </h4>
                       <div className="mb-2">
-                        {/* OPTIMIZED: Added htmlFor and id for A11y */}
                         <label htmlFor="userPreferences" className="block text-sm font-bold text-gray-700 mb-2">
                           Lodging style, activities, or specific destinations
                         </label>
@@ -812,7 +808,6 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                       </h4>
                       <div className="space-y-4">
                         <div>
-                          {/* OPTIMIZED: Added htmlFor and id for A11y */}
                           <label htmlFor="contactName" className="block text-sm font-bold text-gray-700 mb-2">
                             Full Name
                           </label>
@@ -866,8 +861,8 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                               value={formData.phone}
                               onChange={handleInputChange}
                               onInput={(e) =>
-                                (e.currentTarget.value =
-                                  e.currentTarget.value.replace(/[^0-9]/g, ""))
+                              (e.currentTarget.value =
+                                e.currentTarget.value.replace(/[^0-9]/g, ""))
                               }
                               className="flex-grow p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none"
                             />
@@ -906,7 +901,7 @@ export default function HomeClient({ sanityVideos = [] }: HomeClientProps) {
                       !isValidName ||
                       !isValidEmail ||
                       !formData.phone ||
-                      formData.phone.length < 10  // THE FIX: Corrected phone length validation
+                      formData.phone.length < 10
                     }
                     className="bg-orange-500 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center min-w-[150px]"
                   >

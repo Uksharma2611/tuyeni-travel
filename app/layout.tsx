@@ -116,6 +116,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
+        {/* --- PHASE 4 FIX: Preload the high-priority LCP WebP image instantly --- */}
+        <link rel="preload" href="/assets/fourth.webp" as="image" fetchPriority="high" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
